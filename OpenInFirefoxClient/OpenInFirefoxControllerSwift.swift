@@ -10,7 +10,7 @@ class OpenInFirefoxControllerSwift: NSObject {
     let basicURL = NSURL(string: "firefox://")!
 
     // Input your custom URI scheme to provide callback to your app.
-    let myAppScheme = NSURL(string: "firefoxopeninfirefoxclient://")!
+    let myAppScheme = "firefoxopeninfirefoxclient://"
     let app = UIApplication.sharedApplication()
 
     func encodeByAddingPercentEscapes(input: NSString) -> NSString {
@@ -28,6 +28,7 @@ class OpenInFirefoxControllerSwift: NSObject {
     }
 
     func openInFirefox(url: NSURL) ->  Bool {
+        var myAppScheme = NSURL(string: self.myAppScheme)
         return openInFirefox(url, callbackScheme: myAppScheme)
     }
 
