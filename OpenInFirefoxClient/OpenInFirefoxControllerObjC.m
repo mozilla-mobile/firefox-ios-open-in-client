@@ -46,30 +46,33 @@ static NSString *encodeByAddingPercentEscapes(NSString *string) {
 - (BOOL)openInFirefox:(NSURL *)url
 callbackScheme:(NSURL *)myAppScheme {
   NSURL *simpleFirefoxURL = [NSURL URLWithString:firefoxScheme];
-  if ([[UIApplication sharedApplication] canOpenURL:simpleFirefoxURL]) {
-    NSString *scheme = [url.scheme lowercaseString];
-    if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
-      NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
-      if (myAppScheme && appName) {
-        NSString *urlString = [url absoluteString];
-        NSMutableString *firefoxURLWithCallbackString = [NSMutableString string];
-        [firefoxURLWithCallbackString appendFormat:@"%@//x-callback-url/open/?x-source=%@&url=%@&x-source-name=%@", firefoxScheme, myAppScheme, encodeByAddingPercentEscapes(urlString), encodeByAddingPercentEscapes(appName)];
-        NSURL *firefoxURL = [NSURL URLWithString:[firefoxURLWithCallbackString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-
-        // Open the URL with Firefox and callback button.
-        return [[UIApplication sharedApplication] openURL:firefoxURL];
-      } else {
-        NSString *urlString = [url absoluteString];
-        NSMutableString *firefoxURLString = [NSMutableString string];
-        [firefoxURLString appendFormat:@"%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(urlString)];
-        NSURL *firefoxURL = [NSURL URLWithString:[firefoxURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
-
-        // Open the URL with Firefox.
-        return [[UIApplication sharedApplication] openURL:firefoxURL];
-      }
-    }
+  if (![[UIApplication sharedApplication] canOpenURL:simpleFirefoxURL]) {
+    return NO;
   }
-  return NO;
+
+  NSString *scheme = [url.scheme lowercaseString];
+  if (![scheme isEqualToString:@"http"] && ![scheme isEqualToString:@"https"]) {
+    return NO;
+  }
+
+  NSString *appName = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"];
+  if (myAppScheme && appName) {
+    NSString *urlString = [url absoluteString];
+    NSMutableString *firefoxURLWithCallbackString = [NSMutableString string];
+    [firefoxURLWithCallbackString appendFormat:@"%@//x-callback-url/open/?x-source=%@&url=%@&x-source-name=%@", firefoxScheme, myAppScheme, encodeByAddingPercentEscapes(urlString), encodeByAddingPercentEscapes(appName)];
+    NSURL *firefoxURL = [NSURL URLWithString:[firefoxURLWithCallbackString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+
+    // Open the URL with Firefox and callback button.
+    return [[UIApplication sharedApplication] openURL:firefoxURL];
+  } else {
+    NSString *urlString = [url absoluteString];
+    NSMutableString *firefoxURLString = [NSMutableString string];
+    [firefoxURLString appendFormat:@"%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(urlString)];
+    NSURL *firefoxURL = [NSURL URLWithString:[firefoxURLString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+
+    // Open the URL with Firefox.
+    return [[UIApplication sharedApplication] openURL:firefoxURL];
+  }
 }
 
 @end
