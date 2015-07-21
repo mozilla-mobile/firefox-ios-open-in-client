@@ -5,48 +5,57 @@
 import Foundation
 import UIKit
 
-class OpenInFirefoxControllerSwift: NSObject {
+public class OpenInFirefoxControllerSwift {
     let firefoxScheme = "firefox:"
     let basicURL = NSURL(string: "firefox://")!
 
     // Input your custom URI scheme to provide callback to your app.
     let myAppScheme = "firefoxopeninfirefoxclient://"
+
+    // This would need to be changed if used from an extension… but you
+    // can't open arbitrary URLs from an extension anyway.
     let app = UIApplication.sharedApplication()
 
-    func encodeByAddingPercentEscapes(input: NSString) -> NSString {
-        var encodedValue: NSString = CFURLCreateStringByAddingPercentEscapes(
-        kCFAllocatorDefault,
-        input as CFStringRef,
-        nil,
-        "!*'();:@&=+$,/?%#[]" as CFStringRef,
-        kCFStringEncodingASCII)
-        return encodedValue
+    private func encodeByAddingPercentEscapes(input: NSString) -> NSString {
+        return CFURLCreateStringByAddingPercentEscapes(
+            kCFAllocatorDefault,
+            input as CFStringRef,
+            nil,
+            "!*'();:@&=+$,/?%#[]" as CFStringRef,
+            kCFStringEncodingASCII)
     }
 
-    func isFirefoxInstalled() -> Bool {
+    public func isFirefoxInstalled() -> Bool {
         return app.canOpenURL(basicURL)
     }
 
-    func openInFirefox(url: NSURL) ->  Bool {
-        var myAppScheme = NSURL(string: self.myAppScheme)
+    public func openInFirefox(url: NSURL) ->  Bool {
+        let myAppScheme = NSURL(string: self.myAppScheme)
         return openInFirefox(url, callbackScheme: myAppScheme)
     }
 
-    func openInFirefox(url: NSURL, callbackScheme: NSURL?) -> Bool {
-        if app.canOpenURL(basicURL) {
-            let scheme = url.scheme
-            if scheme == "http" || scheme == "https" {
-                var firefoxURLString: NSMutableString
-                if let callback = callbackScheme,
-                       appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleDisplayName") as? NSString {
-                    firefoxURLString = NSMutableString(format: "%@//x-callback-url/open/?x-source=%@&url=%@&x-source-name=%@", firefoxScheme, callback, encodeByAddingPercentEscapes(url.absoluteString!), encodeByAddingPercentEscapes(appName))
-                } else {
-                    firefoxURLString = NSMutableString(format: "%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(url.absoluteString!))
-                }
-                let firefoxURL = NSURL(string: firefoxURLString.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet())! as String)
-                return app.openURL(firefoxURL!)
+    public func openInFirefox(url: NSURL, callbackScheme: NSURL?) -> Bool {
+        if !app.canOpenURL(basicURL) {
+            return false
+        }
+
+        let scheme = url.scheme
+        if scheme == "http" || scheme == "https" {
+            let firefoxURLString: NSMutableString
+            if let callback = callbackScheme,
+                   appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleDisplayName") as? NSString {
+                firefoxURLString = NSMutableString(format: "%@//x-callback-url/open/?x-source=%@&url=%@&x-source-name=%@", firefoxScheme, callback, encodeByAddingPercentEscapes(url.absoluteString!), encodeByAddingPercentEscapes(appName))
+            } else {
+                firefoxURLString = NSMutableString(format: "%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(url.absoluteString!))
+            }
+
+            let allowed = NSCharacterSet.URLQueryAllowedCharacterSet()
+            if let encoded = firefoxURLString.stringByAddingPercentEncodingWithAllowedCharacters(allowed),
+                   firefoxURL = NSURL(string: encoded as String) {
+                return app.openURL(firefoxURL)
             }
         }
+
         return false
     }
 }

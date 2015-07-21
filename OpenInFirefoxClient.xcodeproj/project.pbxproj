@@ -41,6 +41,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		28D3923A1B5DC56D0016F0E5 /* Example App */ = {
+			isa = PBXGroup;
+			children = (
+				74D20F831B2B789500A41894 /* AppDelegate.swift */,
+				74D20F851B2B789500A41894 /* ViewController.swift */,
+				74D20F871B2B789500A41894 /* Main.storyboard */,
+				74D20F8A1B2B789500A41894 /* Images.xcassets */,
+				74D20F8C1B2B789500A41894 /* LaunchScreen.xib */,
+			);
+			name = "Example App";
+			sourceTree = "<group>";
+		};
 		74D20F751B2B789500A41894 = {
 			isa = PBXGroup;
 			children = (
@@ -60,15 +72,11 @@
 		74D20F801B2B789500A41894 /* OpenInFirefoxClient */ = {
 			isa = PBXGroup;
 			children = (
-				74D20F831B2B789500A41894 /* AppDelegate.swift */,
-				7459FBEB1B323CFE002DCC8A /* OpenInFirefoxControllerObjC.h */,
+				28D3923A1B5DC56D0016F0E5 /* Example App */,
 				74D20FC71B2B926500A41894 /* OpenInFirefoxControllerSwift.swift */,
+				7459FBEB1B323CFE002DCC8A /* OpenInFirefoxControllerObjC.h */,
 				7459FBEC1B323CFE002DCC8A /* OpenInFirefoxControllerObjC.m */,
 				746140F21B2F43F30011A8A6 /* OpenInFirefoxClient-Bridging-Header.h */,
-				74D20F851B2B789500A41894 /* ViewController.swift */,
-				74D20F871B2B789500A41894 /* Main.storyboard */,
-				74D20F8A1B2B789500A41894 /* Images.xcassets */,
-				74D20F8C1B2B789500A41894 /* LaunchScreen.xib */,
 				74D20F811B2B789500A41894 /* Supporting Files */,
 			);
 			path = OpenInFirefoxClient;
@@ -217,7 +225,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -256,7 +264,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
