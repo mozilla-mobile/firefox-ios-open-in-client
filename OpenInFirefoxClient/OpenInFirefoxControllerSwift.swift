@@ -9,9 +9,6 @@ public class OpenInFirefoxControllerSwift {
     let firefoxScheme = "firefox:"
     let basicURL = NSURL(string: "firefox://")!
 
-    // Input your custom URI scheme to provide callback to your app.
-    let myAppScheme = "firefoxopeninfirefoxclient://"
-
     // This would need to be changed if used from an extension… but you
     // can't open arbitrary URLs from an extension anyway.
     let app = UIApplication.sharedApplication()
@@ -30,32 +27,17 @@ public class OpenInFirefoxControllerSwift {
     }
 
     public func openInFirefox(url: NSURL) ->  Bool {
-        let myAppScheme = NSURL(string: self.myAppScheme)
-        return openInFirefox(url, callbackScheme: myAppScheme)
-    }
-
-    public func openInFirefox(url: NSURL, callbackScheme: NSURL?) -> Bool {
-        if !app.canOpenURL(basicURL) {
+        if !isFirefoxInstalled() {
             return false
         }
 
         let scheme = url.scheme
         if scheme == "http" || scheme == "https" {
-            let firefoxURLString: NSMutableString
-            if let callback = callbackScheme,
-                   appName = NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleDisplayName") as? NSString {
-                firefoxURLString = NSMutableString(format: "%@//x-callback-url/open/?x-source=%@&url=%@&x-source-name=%@", firefoxScheme, callback, encodeByAddingPercentEscapes(url.absoluteString!), encodeByAddingPercentEscapes(appName))
-            } else {
-                firefoxURLString = NSMutableString(format: "%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(url.absoluteString!))
-            }
-
-            let allowed = NSCharacterSet.URLQueryAllowedCharacterSet()
-            if let encoded = firefoxURLString.stringByAddingPercentEncodingWithAllowedCharacters(allowed),
-                   firefoxURL = NSURL(string: encoded as String) {
+            let firefoxURLString = NSMutableString(format: "%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(url.absoluteString))
+            if let firefoxURL = NSURL(string: firefoxURLString as String) {
                 return app.openURL(firefoxURL)
             }
         }
-
         return false
     }
 }
