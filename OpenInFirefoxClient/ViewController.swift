@@ -7,13 +7,13 @@ import UIKit
 import WebKit
 
 class ViewController: UIViewController {
-    let url = NSURL(string: "https://www.mozilla.org/en-US/newsletter/ios/")!
+    let url = NSURL(string: "https://www.mozilla.org/en-US/firefox/ios/")!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         let myWebView = UIWebView(frame: CGRectMake(0, 0, UIScreen.mainScreen().bounds.width, UIScreen.mainScreen().bounds.height))
 
-        let swiftButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+        let swiftButton = UIButton(type: UIButtonType.System)
         swiftButton.frame = CGRectMake(100, 100, 200, 50)
         swiftButton.center = CGPoint(x: self.view.center.x, y: self.view.center.y - 150)
         swiftButton.backgroundColor = UIColor.orangeColor()
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         swiftButton.tintColor = UIColor.whiteColor()
         swiftButton.addTarget(self, action: "buttonActionSwift:", forControlEvents: UIControlEvents.TouchUpInside)
 
-        let objCButton = UIButton.buttonWithType(UIButtonType.System) as! UIButton
+        let objCButton = UIButton(type: UIButtonType.System)
         objCButton.frame = CGRectMake(100, 300, 200, 50)
         objCButton.center = CGPoint(x: self.view.center.x, y: self.view.center.y)
         objCButton.backgroundColor = UIColor.blueColor()
