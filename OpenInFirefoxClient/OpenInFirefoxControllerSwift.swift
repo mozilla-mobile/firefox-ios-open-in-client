@@ -33,8 +33,8 @@ public class OpenInFirefoxControllerSwift {
 
         let scheme = url.scheme
         if scheme == "http" || scheme == "https" {
-            let firefoxURLString = NSMutableString(format: "%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(url.absoluteString))
-            if let firefoxURL = NSURL(string: firefoxURLString as String) {
+            let escaped = encodeByAddingPercentEscapes(url.absoluteString)
+            if let firefoxURL = NSURL(string: "firefox://open-url?url=\(escaped)") {
                 return app.openURL(firefoxURL)
             }
         }
