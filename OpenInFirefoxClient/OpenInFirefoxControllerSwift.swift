@@ -5,28 +5,23 @@
 import Foundation
 import UIKit
 
-public class OpenInFirefoxControllerSwift {
+open class OpenInFirefoxControllerSwift {
     let firefoxScheme = "firefox:"
-    let basicURL = NSURL(string: "firefox://")!
+    let basicURL = URL(string: "firefox://")!
 
     // This would need to be changed if used from an extension… but you
     // can't open arbitrary URLs from an extension anyway.
-    let app = UIApplication.sharedApplication()
+    let app = UIApplication.shared
 
-    private func encodeByAddingPercentEscapes(input: NSString) -> NSString {
-        return CFURLCreateStringByAddingPercentEscapes(
-            kCFAllocatorDefault,
-            input as CFStringRef,
-            nil,
-            "!*'();:@&=+$,/?%#[]" as CFStringRef,
-            kCFStringEncodingASCII)
+    fileprivate func encodeByAddingPercentEscapes(_ input: String) -> String {
+        return NSString(string: input).addingPercentEncoding(withAllowedCharacters: CharacterSet(charactersIn: "!*'();:@&=+$,/?%#[]"))!
     }
 
-    public func isFirefoxInstalled() -> Bool {
+    open func isFirefoxInstalled() -> Bool {
         return app.canOpenURL(basicURL)
     }
 
-    public func openInFirefox(url: NSURL) ->  Bool {
+    open func openInFirefox(_ url: URL) ->  Bool {
         if !isFirefoxInstalled() {
             return false
         }
@@ -34,7 +29,7 @@ public class OpenInFirefoxControllerSwift {
         let scheme = url.scheme
         if scheme == "http" || scheme == "https" {
             let escaped = encodeByAddingPercentEscapes(url.absoluteString)
-            if let firefoxURL = NSURL(string: "firefox://open-url?url=\(escaped)") {
+            if let firefoxURL = URL(string: "firefox://open-url?url=\(escaped)") {
                 return app.openURL(firefoxURL)
             }
         }
