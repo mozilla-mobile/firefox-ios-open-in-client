@@ -37,23 +37,26 @@ static NSString *encodeByAddingPercentEscapes(NSString *string) {
 }
 
 // Opens the URL in Firefox.
-- (BOOL)openInFirefox:(NSURL *)url {
-    if (![self isFirefoxInstalled]) {
-        return NO;
+- (void)openInFirefox:(NSURL *)url {
+    if ([self isFirefoxInstalled]) {
+        
+        NSString *scheme = [url.scheme lowercaseString];
+        if ([scheme isEqualToString:@"http"] || [scheme isEqualToString:@"https"]) {
+            
+            NSString *urlString = [url absoluteString];
+            NSMutableString *firefoxURLString = [NSMutableString string];
+            [firefoxURLString appendFormat:@"%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(urlString)];
+            NSURL *firefoxURL = [NSURL URLWithString: firefoxURLString];
+            
+            // Open the URL with Firefox.
+            if ([[UIApplication sharedApplication] respondsToSelector:@selector(openURL:options:completionHandler:)]) {
+                [[UIApplication sharedApplication] openURL:firefoxURL options:@{}
+                   completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:firefoxURL];
+            }
+        }
     }
-
-    NSString *scheme = [url.scheme lowercaseString];
-    if (![scheme isEqualToString:@"http"] && ![scheme isEqualToString:@"https"]) {
-        return NO;
-    }
-
-    NSString *urlString = [url absoluteString];
-    NSMutableString *firefoxURLString = [NSMutableString string];
-    [firefoxURLString appendFormat:@"%@//open-url?url=%@", firefoxScheme, encodeByAddingPercentEscapes(urlString)];
-    NSURL *firefoxURL = [NSURL URLWithString: firefoxURLString];
-
-    // Open the URL with Firefox.
-    return [[UIApplication sharedApplication] openURL:firefoxURL];
 }
 
 @end

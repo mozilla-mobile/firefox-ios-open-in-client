@@ -15,6 +15,6 @@
 - (BOOL)isFirefoxInstalled;
 
 // Opens a URL in Firefox.
-- (BOOL)openInFirefox:(NSURL *)url;
+- (void)openInFirefox:(NSURL *)url;
 
 @end
