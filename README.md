@@ -14,7 +14,7 @@ Firefox uses a single URI scheme, `firefox://`. This scheme can accepts the foll
 
 For Example: 
 ```
-firefox://open-url?url=https%253A%252F%252Fwww.mozilla.org%252Fen-US%252Fnewsletter%252Fios%252F
+firefox://open-url?url=https://www.google.com/search%3Fq%3Dfirefox%2520for%2520ios
 ```
 ### Walkthrough ###
 1. Download the class file in the language of your choice:
